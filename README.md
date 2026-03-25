@@ -1,31 +1,42 @@
-
----
-
 # LEGO Kamera Dolly Projekt
 
-Der Kameradolly besteht aus einer Hoizontalen und Vertikalen Drehachse, sowie einem Chassis zum fahren.
+Der Kameradolly besteht aus einer horizontalen und vertikalen Drehachse sowie einem Chassis zum Fahren.
 
-> Hier Foto einfügen
+_Foto des fertigen Modells folgt in Kürze._
 
-Das 'Gimble' (bestehend aus der horizontalen und vertikalen Rotationsachse) wird modular auf das Chassis gesetzt und kann um jeweils 90° rotiert angebaut werden.
+Das Gimbal (bestehend aus der horizontalen und vertikalen Rotationsachse) wird modular auf das Chassis gesetzt und kann um jeweils 90° rotiert angebaut werden.
 
-> Hier Foto einfügen
+_Foto des fertigen Modells folgt in Kürze._
 
 ## Vertikale und horizontale Rotationsachsen
 
-Die Untersetzung für sowohl die **vertikale** als auch die **horizontale Rotationsachse** beträgt 1:960. Dabei sind an der horizontalen Achse zwei Motoren verbaut, während die vertikale Achse von nur einem Motor angetrieben wird.
+Die Untersetzung für sowohl die **vertikale** als auch die **horizontale Rotationsachse** beträgt 1:960.
 
-> Hier Fotos einfügen
+### Horizontale Rotationsachse — 1:960
+
+Die horizontale Rotationsachse besteht aus zwei gespiegelten Drehpunkten, die sich gegenüberliegen. Dadurch wird die horizontale Drehachse durch zwei Motoren angetrieben.
+
+<p align="center"><img src="./images/horizontal-axis-of-rotation_front.png" alt="Horizontale Rotationsachse" width="50%"></p>
+
+### Vertikale Rotationsachse — 1:960
+
+Die vertikale Rotationsachse besteht aus nur einem Drehpunkt und somit einem Motor.
+
+<p align="center"><img src="./images/vertical-axis-of-rotation_front.png" alt="Vertikale Rotationsachse" width="70%"></p>
 
 ## Chassis mit Panzersteuerung (Skid-Steering)
 
-Das Chassis besteht aus vier Gearboxen mit einer Untersetzung von 1:256. Jede Gearbox verfügt über einen eigenen Motor. Dadurch kann das Fahrzeug ähnlich wie ein Panzer manövrieren, agiert jedoch effizienter: Kurven werden intelligent durch Geschwindigkeitsunterschiede zwischen dem Innen- und dem Außenrad gefahren. Dieses Verhalten simuliert Funktionen einer Differenzial-Lenkung oder der Ackermann-Lenkung.
+Das Chassis besteht aus vier Gearboxen mit einer Untersetzung von 1:256. Jede Gearbox verfügt über einen eigenen Motor. Dadurch kann das Fahrzeug ähnlich wie ein Panzer manövrieren, agiert jedoch effizienter: Kurven werden durch gezielte Geschwindigkeitsunterschiede zwischen dem Innen- und dem Außenrad gefahren. Dieses Verhalten simuliert prinzipiell die Funktionsweise einer Differenzial- oder Ackermann-Lenkung, bei der sich das äußere Rad in einer Kurvenfahrt schneller dreht als das innere. Die genaue Berechnung der Kurvenfahrten muss noch entwickelt, erprobt und getestet werden. Dieser Schritt erfolgt im Rahmen der Implementierung der Logik und Steuerung auf dem ESP32.
 
-> Hier Fotos einfügen
+### Gearbox
 
-Alle sieben Antriebe, sowohl für das Chassis als auch für die Drehachsen der Kamera, verwenden einheitlich den Lego 8883 Motor. Bei der Motorenwahl überwog der Kosten-Nutzen-Faktor: Ein Motor mit Encoder kostet aktuell rund 21 €, während der Lego 8883 als Import bereits für 2,60 € erhältlich ist. Da alle sieben benötigten Motoren bereits vorhanden waren, wurden die ersten Prototypen damit realisiert. Dabei stellte sich heraus, dass die erreichte Präzision – selbst für Lego-Verhältnisse – absolut ausreichend ist.
+<p align="center"><img src="./images/gearbox_2.png" alt="Gearbox"></p>
+
+Alle sieben Antriebe, sowohl für das Chassis als auch für die Drehachsen der Kamera, verwenden einheitlich den Lego 8883 Motor. Bei der Motorenwahl überwog der Kosten-Nutzen-Faktor: Ein Motor mit Encoder kostet aktuell rund 21 €, während der Lego 8883 als Import bereits für 2,60 € erhältlich ist. Da alle sieben benötigten Motoren bereits vorhanden waren, wurden die ersten Prototypen damit realisiert. Dabei stellte sich heraus, dass die erreichte Präzision durch die massive Untersetzung für Lego-Verhältnisse absolut zufriedenstellend ist.
 
 ## Spezifikationen des Lego Motors 8883
+
+<p align="center"><img src="./images/8883.png" alt="Quelle: https://imgbin.com"></p>
 
 * **Betriebsspannung:** 9V
 * **Leerlaufdrehzahl:** ca. 405 U/min
@@ -33,13 +44,15 @@ Alle sieben Antriebe, sowohl für das Chassis als auch für die Drehachsen der K
 * **Stromaufnahme (Leerlauf):** ca. 40 mA
 * **Stromaufnahme (Blockiert):** ca. 850 mA
 
+Aus den Motorspezifikationen lassen sich die resultierenden Geschwindigkeiten der einzelnen Komponenten ableiten:
+
 | Komponente | Geschwindigkeit |
 | :--- | :--- |
 | **Chassis** | ca. 20,8 cm/min |
 | **Kamera Horizontal** | ca. 151,9° / min |
 | **Kamera Vertikal** | ca. 151,9° / min |
 
-> Detaillierte Informationen sind in [gearing.md](gearing.md) dokumentiert.
+> Detaillierte Berechnungen zu Übersetzungen, Geschwindigkeiten und den resultierenden Drehmomenten an den jeweiligen Achsen sind in [gearing.md](gearing.md) dokumentiert.
 
 
 ## Elektronik und Steuerung
@@ -55,6 +68,24 @@ Das System wird von einem **ESP32-Mikrocontroller** gesteuert, der über den I2C
 | Lego 8883 Motor | 7 | Antrieb: 4× Chassis, 2× Kamera horizontal, 1× Kamera vertikal |
 | Netzteil 9V | 1 | Motorstromversorgung für alle TB6612FNG |
 
->Einen detaillierter Anschlussplan, Pinbelegungen und Inbetriebnahme-Schritte sind in [anschlussanleitung.md](anschlussanleitung.md) dokumentiert.
+> Ein detaillierter Anschlussplan, Pinbelegungen und Inbetriebnahme-Schritte sind in [anschlussanleitung.md](anschlussanleitung.md) dokumentiert.
 
----
+## Überblick der Lego Hauptkomponenten
+
+<p align="center"><img src="./images/all-parts.png" alt="Überblick der Lego Hauptkomponenten"></p>
+
+## Erster Prototyp
+
+### Prototyp Chassis
+
+<p align="center"><img src="./images/prototype-chassis.png" alt="Prototyp Chassis"></p>
+
+Die Spurweite ist bewusst größer gewählt als der Radstand, um die Skid-Steering-Charakteristik zu begünstigen. Die Tests haben gezeigt, dass sich das Fahrzeug dadurch perfekt flüssig auf der Stelle im Kreis drehen lässt – womit es in der Lage ist, allerlei Kurvenradien präzise zu fahren.
+
+### Prototyp Gimbal
+
+<p align="center"><img src="./images/prototype-gimble.png" alt="Prototyp Gimbal"></p>
+
+Die ersten Tests haben gezeigt, dass sich sowohl das Chassis als auch das Gimbal für Lego-Verhältnisse bemerkenswert flüssig bewegen – die Untersetzungen und die gewählten Komponenten erfüllen ihren Zweck zuverlässig.
+
+> **Hinweis:** Dies ist nur der Prototyp. Das finale Modell befindet sich noch in der Konstruktion.
